@@ -3,7 +3,7 @@
 -- SCRIPT: 01_crear_tablas.sql
 -- DESCRIPCION: Creacion de todas las tablas
 -- AUTOR: Fernando Abarca e Isaac Van de Bon
--- FECHA: Abril 2026
+-- FECHA del último cambio: 21 de Abril 2026
 -- =============================================
 
 -- Crear la base de datos
