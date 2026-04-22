@@ -2,7 +2,7 @@
 -- BASE DE DATOS: Control de Vacaciones
 -- SCRIPT: 01_crear_tablas.sql
 -- DESCRIPCION: Creacion de todas las tablas
--- AUTOR: Fernando Abarca e Isaac Van de Bon
+-- AUTOR: Fernando Abarca e Isaac Van de Bom
 -- FECHA del último cambio: 21 de Abril 2026
 -- =============================================
 
