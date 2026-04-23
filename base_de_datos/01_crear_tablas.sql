@@ -140,7 +140,7 @@ CREATE TABLE DBError (
     State       INT          NULL,
     Severity    INT          NULL,
     Line        INT          NULL,
-    [Procedure] VARCHAR(200) NULL,        -- corchetes obligatorios, es palabra reservada
+    [Procedure] VARCHAR(200) NULL,        --corchetes obligatorios, es palabra reservada
     Message     VARCHAR(500) NULL,
     DateTime    DATETIME     NOT NULL DEFAULT GETDATE()
 );
