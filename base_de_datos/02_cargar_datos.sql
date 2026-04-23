@@ -23,10 +23,56 @@ SET @xml = '<Puestos>
 <Puesto Nombre="Albañil" SalarioxHora="10.50"/>
 </Puestos>'
 
-INSERT INTO Puesto (Nombre, SalarioxHora)
+INSERT INTO Puesto (Nombre,SalarioxHora)
 SELECT
     Puesto.value('@Nombre', 'VARCHAR(100)'),
     Puesto.value('@SalarioxHora', 'DECIMAL(10,2)') --No se porque pero no se puede poner el .value en CAPS porque no funka
 FROM @xml.nodes('/Puestos/Puesto') AS T(Puesto);
 
 GO
+
+DECLARE @xml XML 
+SET @xml = '<TiposEvento>
+<TipoEvento Id="1" Nombre="Login Exitoso"/>
+<TipoEvento Id="2" Nombre="Login No Exitoso"/>
+<TipoEvento Id="3" Nombre="Login deshabilitado"/>
+<TipoEvento Id="4" Nombre="Logout"/>
+<TipoEvento Id="5" Nombre="Insercion no exitosa"/>
+<TipoEvento Id="6" Nombre="Insercion exitosa"/>
+<TipoEvento Id="7" Nombre="Update no exitoso"/>
+<TipoEvento Id="8" Nombre="Update exitoso"/>
+<TipoEvento Id="9" Nombre="Intento de borrado"/>
+<TipoEvento Id="10" Nombre="Borrado exitoso"/>
+<TipoEvento Id="11" Nombre="Consulta con filtro de nombre"/>
+<TipoEvento Id="12" Nombre="Consulta con filtro de cedula"/>
+<TipoEvento Id="13" Nombre="Intento de insertar movimiento"/>
+<TipoEvento Id="14" Nombre="Insertar movimiento exitoso"/>
+</TiposEvento>'
+
+INSERT INTO TipoEvento (Id,Nombre)
+SELECT
+    TipoEvento.value('@Id', 'INT'),
+    TipoEvento.value('@Nombre', 'VARCHAR(100)')
+FROM @xml.nodes('/TiposEvento/TipoEvento') AS T(TipoEvento);
+
+GO
+
+DEClARE @xml XML
+SET @xml = '<TiposMovimientos>
+<TipoMovimiento Id="1" Nombre="Cumplir mes" TipoAccion="Credito"/>
+<TipoMovimiento Id="2" Nombre="Bono vacacional" TipoAccion="Credito"/>
+<TipoMovimiento Id="3" Nombre="Reversion Debito" TipoAccion="Credito"/>
+<TipoMovimiento Id="4" Nombre="Disfrute de vacaciones" TipoAccion="Debito"/>
+<TipoMovimiento Id="5" Nombre="Venta de vacaciones" TipoAccion="Debito"/>
+<TipoMovimiento Id="6" Nombre="Reversion de Credito" TipoAccion="Debito"/>
+</TiposMovimientos>'
+
+INSERT INTO TipoMovimiento(Id,Nombre,TipoAccion)
+SELECT
+    TipoMovimiento.value('@Id','INT'),
+    TipoMovimiento.value('@Nombre','VARCHAR(100)'),
+    TipoMovimiento.value('@TipoAccion','VARCHAR(10)')
+FROM @xml.nodes('/TiposMovimientos/TipoMovimiento') AS T(TipoMovimiento);
+
+GO
+
