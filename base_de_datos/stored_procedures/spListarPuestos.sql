@@ -1,0 +1,4 @@
+-- STORED PROCEDURE: spListarPuestos
+-- DESCRIPCION: Retorna todos los puestos en orden
+--              alfabetico para llenar los dropdowns.
+-- =============================================
