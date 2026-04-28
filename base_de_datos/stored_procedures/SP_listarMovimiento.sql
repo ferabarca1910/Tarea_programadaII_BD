@@ -1,4 +1,4 @@
--- =============================================
+
 -- STORED PROCEDURE: spListarMovimientos
 -- DESCRIPCION: Lista todos los movimientos de un
 --              empleado ordenados por fecha descendente.
