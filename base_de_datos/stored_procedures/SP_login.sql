@@ -88,3 +88,53 @@ BEGIN
 
             RETURN;
         END
+    -- ---------------------------------------------
+    -- Etapa 3: Verificamos contraseña
+    -- ---------------------------------------------
+    IF NOT EXISTS (
+        SELECT 1
+        FROM Usuario
+        WHERE Id       = @IdUsuario
+          AND Password = @Password
+    )
+    BEGIN
+        SET @CodigoError = 50002; -- Password incorrecto
+
+        -- Contador intentos fallidos recientes
+        SELECT @IntentosRecientes = COUNT(*)
+        FROM BitacoraEvento
+        WHERE IdTipoEvento = 2
+          AND PostInIP     = @IP
+          AND PostTime     >= DATEADD(MINUTE, -20, GETDATE())
+          AND Descripcion  LIKE '%' + @Username + '%';
+
+        SET @NumeroIntento = @IntentosRecientes + 1;
+
+        -- Registrar intento fallido
+        INSERT INTO BitacoraEvento (IdTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)
+        VALUES (
+            2,
+            'Intento ' + CAST(@NumeroIntento AS VARCHAR) + ' - Error: ' + CAST(@CodigoError AS VARCHAR),
+            @IdUsuarioScript, @IP, GETDATE()
+        );
+
+        -- Si llega a 5 intentos, registrar deshabilitado
+        IF @NumeroIntento >= 5
+        BEGIN
+            INSERT INTO BitacoraEvento (IdTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)
+            VALUES (3, @Username, @IdUsuarioScript, @IP, GETDATE());
+        END
+
+        RETURN;
+    END
+
+    -- ---------------------------------------------
+    -- Etaps 4: Login exitoso
+    -- ---------------------------------------------
+    SET @CodigoError = 0;
+
+    INSERT INTO BitacoraEvento (IdTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)
+    VALUES (1, 'Exitoso', @IdUsuario, @IP, GETDATE());
+
+END
+GO
