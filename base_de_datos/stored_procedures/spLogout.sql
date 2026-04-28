@@ -1,0 +1,4 @@
+-- STORED PROCEDURE: spLogout
+-- DESCRIPCION: Registra el cierre de sesion
+--              del usuario en la bitacora
+-- =============================================
