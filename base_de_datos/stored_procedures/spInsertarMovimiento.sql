@@ -1,0 +1,6 @@
+-- STORED PROCEDURE: spInsertarMovimiento
+-- DESCRIPCION: Inserta un movimiento de vacaciones.
+--              Valida que el saldo no quede negativo.
+--              Actualiza SaldoVacaciones del empleado.
+--              Registra resultado en bitacora.
+-- =============================================
