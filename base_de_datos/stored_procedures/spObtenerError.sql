@@ -1,0 +1,4 @@
+-- STORED PROCEDURE: spObtenerError
+-- DESCRIPCION: Recibe un codigo y retorna la
+--              descripcion del error desde la tabla Error.
+-- =============================================
