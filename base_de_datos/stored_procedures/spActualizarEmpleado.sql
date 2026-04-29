@@ -1,0 +1,6 @@
+-- STORED PROCEDURE: spActualizarEmpleado
+-- DESCRIPCION: Actualizará cedula, nombre y puesto
+--              de un empleado. El saldo NO es editable.
+--              Validara duplicados contra otros empleados.
+--              Registrara resultado en bitacora.
+-- =============================================
