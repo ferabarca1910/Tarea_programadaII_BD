@@ -76,5 +76,71 @@ BEGIN
 
             RETURN;
         END
+        -- ---------------------------------------------
+        -- Etapa 4: Validaremos si el  nombre esta duplicado
+        -- ---------------------------------------------
+        IF EXISTS (
+            SELECT 1 FROM Empleado
+            WHERE Nombre   = @NuevoNombre
+              AND EsActivo = 1
+              AND Id       <> @IdEmpleado
+        )
+        BEGIN
+            SET @CodigoError = 50007;
+
+            SET @DescBitacora =
+                'Error ' + CAST(@CodigoError AS VARCHAR) +
+                ' - Antes: Cedula=' + @CedulaAntes + ' Nombre=' + @NombreAntes + ' Puesto=' + @NombrePuestoAntes +
+                ' - Despues: Cedula=' + @NuevaValorDocumentoIdentidad + ' Nombre=' + @NuevoNombre + ' Puesto=' + @NuevoNombrePuesto +
+                ' - Saldo=' + CAST(@SaldoVacaciones AS VARCHAR);
+
+            INSERT INTO BitacoraEvento (IdTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)
+            VALUES (7, @DescBitacora, @IdUsuario, @IP, GETDATE());
+
+            RETURN;
+        END
+
+        -- ---------------------------------------------
+        -- Etaps 5: Se hace la actualizacion correspondiente
+        -- ---------------------------------------------
+        BEGIN TRANSACTION;
+
+            UPDATE Empleado
+            SET
+                ValorDocumentoIdentidad = @NuevaValorDocumentoIdentidad,
+                Nombre                  = @NuevoNombre,
+                IdPuesto                = @IdPuesto
+            WHERE
+                Id = @IdEmpleado;
+
+            SET @DescBitacora =
+                'Antes: Cedula=' + @CedulaAntes + ' Nombre=' + @NombreAntes + ' Puesto=' + @NombrePuestoAntes +
+                ' - Despues: Cedula=' + @NuevaValorDocumentoIdentidad + ' Nombre=' + @NuevoNombre + ' Puesto=' + @NuevoNombrePuesto +
+                ' - Saldo=' + CAST(@SaldoVacaciones AS VARCHAR);
+
+            INSERT INTO BitacoraEvento (IdTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)
+            VALUES (8, @DescBitacora, @IdUsuario, @IP, GETDATE());
+
+        COMMIT;
+
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK;
+
+        SET @CodigoError = 50008;
+
+        INSERT INTO DBError (UserName, Number, State, Severity, Line, [Procedure], Message, DateTime)
+        VALUES (
+            SYSTEM_USER,
+            ERROR_NUMBER(),
+            ERROR_STATE(),
+            ERROR_SEVERITY(),
+            ERROR_LINE(),
+            ERROR_PROCEDURE(),
+            ERROR_MESSAGE(),
+            GETDATE()
+        );
+    END CATCH
 END
 GO
