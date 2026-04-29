@@ -1,0 +1,10 @@
+-- STORED PROCEDURE: spConsultarEmpleado
+-- DESCRIPCION: Retorna los datos de un empleado
+--              especifico. Solo lectura.
+-- =============================================
+USE ControlVacaciones
+GO
+CREATE PROCEDURE spConsultarEmpleado
+
+END
+GO
