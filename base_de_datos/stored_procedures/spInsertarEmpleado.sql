@@ -78,3 +78,43 @@ BEGIN
 
             RETURN;
         END
+        -- ---------------------------------------------
+        -- Etapa 4: Insertaremos el nueco empleado
+        -- ---------------------------------------------
+        BEGIN TRANSACTION;
+
+            INSERT INTO Empleado (IdPuesto, ValorDocumentoIdentidad, Nombre, FechaContratacion, SaldoVacaciones, EsActivo)
+            VALUES (@IdPuesto, @ValorDocumentoIdentidad, @Nombre, GETDATE(), 0, 1);
+
+            SET @DescBitacora =
+                'Cedula: ' + @ValorDocumentoIdentidad +
+                ' - Nombre: ' + @Nombre +
+                ' - Puesto: ' + @NombrePuesto;
+
+            INSERT INTO BitacoraEvento (IdTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)
+            VALUES (6, @DescBitacora, @IdUsuario, @IP, GETDATE());
+
+        COMMIT;
+
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK;
+
+        SET @CodigoError = 50008;
+
+        INSERT INTO DBError (UserName, Number, State, Severity, Line, [Procedure], Message, DateTime)
+        VALUES (
+            SYSTEM_USER,
+            ERROR_NUMBER(),
+            ERROR_STATE(),
+            ERROR_SEVERITY(),
+            ERROR_LINE(),
+            ERROR_PROCEDURE(),
+            ERROR_MESSAGE(),
+            GETDATE()
+        );
+    END CATCH
+END
+GO
+
