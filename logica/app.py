@@ -129,5 +129,107 @@ def actualizar_empleado(id_empleado):
                            error=None)
 
 
+
+@app.route('/eliminar_empleado/<int:id_empleado>', methods=['GET', 'POST'])
+def eliminar_empleado(id_empleado):
+    if 'id_usuario' not in session:
+        return redirect(url_for('login'))
+
+    id_usuario = session['id_usuario']
+    ip = request.remote_addr
+
+    empleado, _ = db.consultar_empleado(id_empleado)
+
+    if request.method == 'POST':
+        confirmado = request.form.get('confirmado', '0')
+
+        codigo_error = db.eliminar_empleado(id_empleado, confirmado, id_usuario, ip)
+
+        if confirmado == '1':
+            return redirect(url_for('empleados'))
+        else:
+            return redirect(url_for('empleados'))
+
+    # GET - registra el intento y muestra confirmacion
+    db.eliminar_empleado(id_empleado, 0, id_usuario, ip)
+
+    return render_template('eliminar_empleado.html',
+                           empleado=empleado,
+                           error=None)
+
+@app.route('/consultar_empleado/<int:id_empleado>')
+def consultar_empleado(id_empleado):
+    if 'id_usuario' not in session:
+        return redirect(url_for('login'))
+
+    empleado, codigo_error = db.consultar_empleado(id_empleado)
+
+    if codigo_error != 0:
+        descripcion_error = db.obtener_error(codigo_error)
+        return redirect(url_for('empleados'))
+
+    return render_template('consultar_empleado.html',
+                           empleado=empleado,
+                           error=None)
+
+@app.route('/movimientos/<int:id_empleado>')
+def movimientos(id_empleado):
+    if 'id_usuario' not in session:
+        return redirect(url_for('login'))
+
+    empleado, movimientos, codigo_error = db.listar_movimientos(id_empleado)
+
+    if codigo_error != 0:
+        descripcion_error = db.obtener_error(codigo_error)
+        return redirect(url_for('empleados'))
+
+    return render_template('movimientos.html',
+                           empleado=empleado,
+                           movimientos=movimientos,
+                           error=None)
+
+@app.route('/insertar_movimiento/<int:id_empleado>', methods=['GET', 'POST'])
+def insertar_movimiento(id_empleado):
+    if 'id_usuario' not in session:
+        return redirect(url_for('login'))
+
+    id_usuario = session['id_usuario']
+    ip = request.remote_addr
+
+    empleado, _ = db.consultar_empleado(id_empleado)
+
+    # Lista de tipos de movimiento para el dropdown
+    tipos_movimiento = [
+        'Cumplir mes',
+        'Bono vacacional', 
+        'Reversion Debito',
+        'Disfrute de vacaciones',
+        'Venta de vacaciones',
+        'Reversion de Credito'
+    ]
+
+    if request.method == 'POST':
+        nombre_tipo_movimiento = request.form['tipo_movimiento']
+        monto                  = request.form['monto']
+        fecha                  = request.form['fecha']
+
+        codigo_error = db.insertar_movimiento(id_empleado, nombre_tipo_movimiento, 
+                                              monto, fecha, id_usuario, ip)
+
+        if codigo_error == 0:
+            return redirect(url_for('movimientos', id_empleado=id_empleado))
+        else:
+            descripcion_error = db.obtener_error(codigo_error)
+            return render_template('insertar_movimiento.html',
+                                   empleado=empleado,
+                                   tipos_movimiento=tipos_movimiento,
+                                   error=descripcion_error)
+
+    return render_template('insertar_movimiento.html',
+                           empleado=empleado,
+                           tipos_movimiento=tipos_movimiento,
+                           error=None)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
