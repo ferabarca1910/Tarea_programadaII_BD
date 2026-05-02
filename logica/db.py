@@ -99,3 +99,56 @@ def insertar_empleado(valor_documento, nombre, nombre_puesto, id_usuario, ip):
     con.close()
 
     return codigo_error
+
+def actualizar_empleado(id_empleado, nuevo_documento, nuevo_nombre, nuevo_puesto, id_usuario, ip):
+    con = get_conexion()
+    cursor = con.cursor()
+
+    cursor.execute("""
+        DECLARE @CodigoError INT;
+        EXEC spActualizarEmpleado ?, ?, ?, ?, ?, ?, @CodigoError OUTPUT;
+        SELECT @CodigoError;
+    """, id_empleado, nuevo_documento, nuevo_nombre, nuevo_puesto, id_usuario, ip)
+
+    cursor.nextset()
+    codigo_error = cursor.fetchone()[0]
+
+    con.close()
+
+    return codigo_error
+
+def eliminar_empleado(id_empleado, confirmado, id_usuario, ip):
+    con = get_conexion()
+    cursor = con.cursor()
+
+    cursor.execute("""
+        DECLARE @CodigoError INT;
+        EXEC spEliminarEmpleado ?, ?, ?, ?, @CodigoError OUTPUT;
+        SELECT @CodigoError;
+    """, id_empleado, confirmado, id_usuario, ip)
+
+    cursor.nextset()
+    codigo_error = cursor.fetchone()[0]
+
+    con.close()
+
+    return codigo_error
+
+def consultar_empleado(id_empleado):
+    con = get_conexion()
+    cursor = con.cursor()
+
+    cursor.execute("""
+        DECLARE @CodigoError INT;
+        EXEC spConsultarEmpleado ?, @CodigoError OUTPUT;
+        SELECT @CodigoError;
+    """, id_empleado)
+
+    empleado = cursor.fetchone()
+
+    cursor.nextset()
+    codigo_error = cursor.fetchone()[0]
+
+    con.close()
+
+    return empleado, codigo_error
