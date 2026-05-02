@@ -230,6 +230,11 @@ def insertar_movimiento(id_empleado):
                            tipos_movimiento=tipos_movimiento,
                            error=None)
 
+@app.after_request
+def no_cache(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
