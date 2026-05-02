@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Insertar Empleado - Control de Vacaciones</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Nuevo Empleado</h2>
+            <a href="{{ url_for('empleados') }}" class="btn-logout">Volver</a>
+        </div>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST" class="form-empleado">
+            <label>Cédula:</label>
+            <input type="text" name="valor_documento" required/>
+
+            <label>Nombre:</label>
+            <input type="text" name="nombre" required/>
+
+            <label>Puesto:</label>
+            <select name="nombre_puesto">
+                {% for puesto in puestos %}
+                    <option value="{{ puesto[1] }}">{{ puesto[1] }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
