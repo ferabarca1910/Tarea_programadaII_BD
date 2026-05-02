@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Empleados - Control de Vacaciones</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Control de Vacaciones - Empleados</h2>
+            <a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a>
+        </div>
+
+        <!-- Filtro -->
+        <form method="POST" class="filtro-form">
+            <input type="text" name="filtro" placeholder="Buscar por nombre o cédula..." value="{{ filtro }}"/>
+            <button type="submit">Filtrar</button>
+        </form>
+
+        <!-- Boton insertar -->
+        <a href="{{ url_for('insertar_empleado') }}" class="btn-insertar">+ Nuevo Empleado</a>
+
+        <!-- Tabla de empleados -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Cédula</th>
+                    <th>Nombre</th>
+                    <th>Puesto</th>
+                    <th>Saldo Vacaciones</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emp in empleados %}
+                <tr>
+                    <td>{{ emp[1] }}</td>
+                    <td>{{ emp[2] }}</td>
+                    <td>{{ emp[3] }}</td>
+                    <td>{{ emp[4] }}</td>
+                    <td>
+                        <a href="{{ url_for('consultar_empleado', id_empleado=emp[0]) }}">Ver</a>
+                        <a href="{{ url_for('actualizar_empleado', id_empleado=emp[0]) }}">Editar</a>
+                        <a href="{{ url_for('eliminar_empleado', id_empleado=emp[0]) }}">Eliminar</a>
+                        <a href="{{ url_for('movimientos', id_empleado=emp[0]) }}">Movimientos</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
