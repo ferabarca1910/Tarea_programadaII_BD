@@ -3,7 +3,7 @@
 --              Si Confirmado=0 solo registrará  el intento de que se quiso borrar.
 --              Si Confirmado=1 realizara la eliminacción.
 -- =============================================
-USE ControlVacaciones
+USE ControlVacaciones;
 GO
 CREATE PROCEDURE spEliminarEmpleado
     -- IN
