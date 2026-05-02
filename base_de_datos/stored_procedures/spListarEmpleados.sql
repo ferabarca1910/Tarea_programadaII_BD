@@ -1,19 +1,16 @@
 USE ControlVacaciones;
 GO  
-
 CREATE PROCEDURE spListarEmpleados
 @Filtro VARCHAR(150),
 @IdUsuario INT,
 @IP VARCHAR(50),
-
 @CodigoError INT OUTPUT
-
 AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @EsNumerico BIT;
     SET @CodigoError = 0;
-    
+
     BEGIN TRY
         --Etapa 1, vamos a ver si es numerico
         IF ISNUMERIC(@Filtro) = 1 AND LEN(@Filtro) > 0 
@@ -42,22 +39,14 @@ BEGIN
             )
         ORDER BY
             E.Nombre ASC;
-
         --Etapa 3 Registrar en la bitacora
-        IF LEN (@Filtro) = 0
+        IF LEN(@Filtro) > 0 AND @EsNumerico = 1
         BEGIN
-            --si no hay filtro no se registra en la bitacora
-            --segun la tarea solo se registra cuando hay filtro 
-        END
-        ELSE IF @EsNumerico = 1
-        BEGIN
-            -- Filtro por cedula - evento 12
             INSERT INTO BitacoraEvento (IdTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)
             VALUES (12, 'Filtro cedula: ' + @Filtro, @IdUsuario, @IP, GETDATE());
         END
-        ELSE
+        ELSE IF LEN(@Filtro) > 0 AND @EsNumerico = 0
         BEGIN
-            -- Filtro por nombre - evento 11
             INSERT INTO BitacoraEvento (IdTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)
             VALUES (11, 'Filtro nombre: ' + @Filtro, @IdUsuario, @IP, GETDATE());
         END
