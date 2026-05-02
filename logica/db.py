@@ -29,3 +29,73 @@ def login(username, password, ip):
     con.close()
 
     return fila[0], fila[1]
+
+def logout(id_usuario, ip):
+    con = get_conexion()
+    cursor = con.cursor()
+
+    cursor.execute("""
+        DECLARE @CodigoError INT;
+        EXEC spLogout ?, ?, @CodigoError OUTPUT;
+        SELECT @CodigoError;
+    """, id_usuario, ip)
+
+    fila = cursor.fetchone()
+    con.close()
+
+    return fila[0]
+
+def listar_empleados(filtro, id_usuario, ip):
+    con = get_conexion()
+    cursor = con.cursor()
+
+    cursor.execute("""
+        DECLARE @CodigoError INT;
+        EXEC spListarEmpleados ?, ?, ?, @CodigoError OUTPUT;
+        SELECT @CodigoError;
+    """, filtro, id_usuario, ip)
+
+    empleados = cursor.fetchall()
+    
+    cursor.nextset()
+    codigo_error = cursor.fetchone()[0]
+    
+    con.close()
+
+    return empleados, codigo_error
+
+def listar_puestos():
+    con = get_conexion()
+    cursor = con.cursor()
+
+    cursor.execute("""
+        DECLARE @CodigoError INT;
+        EXEC spListarPuestos @CodigoError OUTPUT;
+        SELECT @CodigoError;
+    """)
+
+    puestos = cursor.fetchall()
+
+    cursor.nextset()
+    codigo_error = cursor.fetchone()[0]
+
+    con.close()
+
+    return puestos, codigo_error
+
+def insertar_empleado(valor_documento, nombre, nombre_puesto, id_usuario, ip):
+    con = get_conexion()
+    cursor = con.cursor()
+
+    cursor.execute("""
+        DECLARE @CodigoError INT;
+        EXEC spInsertarEmpleado ?, ?, ?, ?, ?, @CodigoError OUTPUT;
+        SELECT @CodigoError;
+    """, valor_documento, nombre, nombre_puesto, id_usuario, ip)
+
+    cursor.nextset()
+    codigo_error = cursor.fetchone()[0]
+
+    con.close()
+
+    return codigo_error
