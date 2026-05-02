@@ -103,7 +103,8 @@ def insertar_empleado(valor_documento, nombre, nombre_puesto, id_usuario, ip):
                 break
     except:
         pass
-
+    
+    con.commit()
     con.close()
     return codigo_error
 
@@ -150,7 +151,8 @@ def actualizar_empleado(id_empleado, nuevo_documento, nuevo_nombre, nuevo_puesto
                 break
     except:
         pass
-
+    
+    con.commit()
     con.close()
     return codigo_error
 
@@ -174,7 +176,8 @@ def eliminar_empleado(id_empleado, confirmado, id_usuario, ip):
                 break
     except:
         pass
-
+    
+    con.commit()
     con.close()
     return codigo_error
 

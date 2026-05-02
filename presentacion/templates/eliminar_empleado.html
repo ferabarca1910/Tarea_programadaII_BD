@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminar Empleado - Control de Vacaciones</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Eliminar Empleado</h2>
+            <a href="{{ url_for('empleados') }}" class="btn-logout">Volver</a>
+        </div>
+
+        <div class="confirmar-box">
+            <p>¿Está seguro de eliminar este empleado?</p>
+
+            <table>
+                <tr>
+                    <th>Cédula</th>
+                    <td>{{ empleado[1] }}</td>
+                </tr>
+                <tr>
+                    <th>Nombre</th>
+                    <td>{{ empleado[2] }}</td>
+                </tr>
+                <tr>
+                    <th>Puesto</th>
+                    <td>{{ empleado[3] }}</td>
+                </tr>
+                <tr>
+                    <th>Saldo Vacaciones</th>
+                    <td>{{ empleado[4] }}</td>
+                </tr>
+            </table>
+
+            <form method="POST" class="form-confirmar">
+                <input type="hidden" name="confirmado" value="1"/>
+                <button type="submit" class="btn-eliminar">Sí, eliminar</button>
+                <a href="{{ url_for('empleados') }}" class="btn-cancelar">Cancelar</a>
+            </form>
+        </div>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

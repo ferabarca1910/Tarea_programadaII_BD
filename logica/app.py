@@ -141,14 +141,13 @@ def eliminar_empleado(id_empleado):
     empleado, _ = db.consultar_empleado(id_empleado)
 
     if request.method == 'POST':
-        confirmado = request.form.get('confirmado', '0')
-
+        confirmado = int(request.form.get('confirmado', 0))
+        print(f"Eliminando: id={id_empleado}, confirmado={confirmado}, usuario={id_usuario}, ip={ip}")
+    
         codigo_error = db.eliminar_empleado(id_empleado, confirmado, id_usuario, ip)
-
-        if confirmado == '1':
-            return redirect(url_for('empleados'))
-        else:
-            return redirect(url_for('empleados'))
+        print(f"Codigo error: {codigo_error}")
+    
+        return redirect(url_for('empleados'))
 
     # GET - registra el intento y muestra confirmacion
     db.eliminar_empleado(id_empleado, 0, id_usuario, ip)
