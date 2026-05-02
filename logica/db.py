@@ -152,3 +152,25 @@ def consultar_empleado(id_empleado):
     con.close()
 
     return empleado, codigo_error
+
+def listar_movimientos(id_empleado):
+    con = get_conexion()
+    cursor = con.cursor()
+
+    cursor.execute("""
+        DECLARE @CodigoError INT;
+        EXEC spListarMovimientos ?, @CodigoError OUTPUT;
+        SELECT @CodigoError;
+    """, id_empleado)
+
+    empleado = cursor.fetchone()
+
+    cursor.nextset()
+    movimientos = cursor.fetchall()
+
+    cursor.nextset()
+    codigo_error = cursor.fetchone()[0]
+
+    con.close()
+
+    return empleado, movimientos, codigo_error
