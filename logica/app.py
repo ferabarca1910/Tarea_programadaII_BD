@@ -93,5 +93,41 @@ def insertar_empleado():
                            puestos=puestos, 
                            error=None)
 
+
+@app.route('/actualizar_empleado/<int:id_empleado>', methods=['GET', 'POST'])
+def actualizar_empleado(id_empleado):
+    if 'id_usuario' not in session:
+        return redirect(url_for('login'))
+
+    id_usuario = session['id_usuario']
+    ip = request.remote_addr
+
+    puestos, _ = db.listar_puestos()
+    empleado, _ = db.consultar_empleado(id_empleado)
+
+    if request.method == 'POST':
+        nuevo_documento = request.form['valor_documento']
+        nuevo_nombre    = request.form['nombre']
+        nuevo_puesto    = request.form['nombre_puesto']
+
+        codigo_error = db.actualizar_empleado(id_empleado, nuevo_documento, 
+                                              nuevo_nombre, nuevo_puesto, 
+                                              id_usuario, ip)
+
+        if codigo_error == 0:
+            return redirect(url_for('empleados'))
+        else:
+            descripcion_error = db.obtener_error(codigo_error)
+            return render_template('actualizar_empleado.html',
+                                   empleado=empleado,
+                                   puestos=puestos,
+                                   error=descripcion_error)
+
+    return render_template('actualizar_empleado.html',
+                           empleado=empleado,
+                           puestos=puestos,
+                           error=None)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
