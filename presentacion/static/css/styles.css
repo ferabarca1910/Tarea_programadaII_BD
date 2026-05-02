@@ -56,3 +56,76 @@ button:hover {
     text-align: center;
     margin-top: 10px;
 }
+
+/* =============================================
+   GENERAL
+   ============================================= */
+.container {
+    width: 90%;
+    margin: 20px auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* =============================================
+   TABLA
+   ============================================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* =============================================
+   BOTONES Y LINKS
+   ============================================= */
+.btn-logout {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.btn-insertar {
+    display: inline-block;
+    background-color: #28a745;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+/* =============================================
+   FILTRO
+   ============================================= */
+.filtro-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.filtro-form input {
+    width: 300px;
+}
