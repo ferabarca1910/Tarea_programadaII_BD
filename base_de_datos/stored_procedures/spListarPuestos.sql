@@ -2,6 +2,8 @@
 -- DESCRIPCION: Retorna todos los puestos en orden
 --              alfabetico para llenar los dropdowns.
 -- =============================================
+USE ControlVacaciones
+GO
 CREATE PROCEDURE spListarPuestos
     -- OUT
     @CodigoError INT OUTPUT
