@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Movimientos - Control de Vacaciones</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Movimientos de Vacaciones</h2>
+            <a href="{{ url_for('empleados') }}" class="btn-logout">Volver</a>
+        </div>
+
+        <!-- Datos del empleado -->
+        <div class="confirmar-box">
+            <table>
+                <tr>
+                    <th>Cédula</th>
+                    <td>{{ empleado[0] }}</td>
+                </tr>
+                <tr>
+                    <th>Nombre</th>
+                    <td>{{ empleado[1] }}</td>
+                </tr>
+                <tr>
+                    <th>Saldo Actual</th>
+                    <td>{{ empleado[2] }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Boton insertar movimiento -->
+        <a href="{{ url_for('insertar_movimiento', id_empleado=empleado[0]) }}" class="btn-insertar">+ Nuevo Movimiento</a>
+
+        <!-- Lista de movimientos -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Acción</th>
+                    <th>Monto</th>
+                    <th>Nuevo Saldo</th>
+                    <th>Usuario</th>
+                    <th>IP</th>
+                    <th>Fecha Registro</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mov in movimientos %}
+                <tr>
+                    <td>{{ mov[0] }}</td>
+                    <td>{{ mov[1] }}</td>
+                    <td>{{ mov[2] }}</td>
+                    <td>{{ mov[3] }}</td>
+                    <td>{{ mov[4] }}</td>
+                    <td>{{ mov[5] }}</td>
+                    <td>{{ mov[6] }}</td>
+                    <td>{{ mov[7] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
