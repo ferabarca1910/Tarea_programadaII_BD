@@ -174,3 +174,20 @@ def listar_movimientos(id_empleado):
     con.close()
 
     return empleado, movimientos, codigo_error
+
+def insertar_movimiento(id_empleado, nombre_tipo_movimiento, monto, fecha, id_usuario, ip):
+    con = get_conexion()
+    cursor = con.cursor()
+
+    cursor.execute("""
+        DECLARE @CodigoError INT;
+        EXEC spInsertarMovimiento ?, ?, ?, ?, ?, ?, @CodigoError OUTPUT;
+        SELECT @CodigoError;
+    """, id_empleado, nombre_tipo_movimiento, monto, fecha, id_usuario, ip)
+
+    cursor.nextset()
+    codigo_error = cursor.fetchone()[0]
+
+    con.close()
+
+    return codigo_error
