@@ -84,6 +84,7 @@ def listar_puestos():
     return puestos, codigo_error
 
 def insertar_empleado(valor_documento, nombre, nombre_puesto, id_usuario, ip):
+    print(f"Insertando: {valor_documento}, {nombre}, {nombre_puesto}, {id_usuario}, {ip}")  # temporal
     con = get_conexion()
     cursor = con.cursor()
 
@@ -93,11 +94,17 @@ def insertar_empleado(valor_documento, nombre, nombre_puesto, id_usuario, ip):
         SELECT @CodigoError;
     """, valor_documento, nombre, nombre_puesto, id_usuario, ip)
 
-    cursor.nextset()
-    codigo_error = cursor.fetchone()[0]
+    codigo_error = 0
+    try:
+        while cursor.nextset():
+            fila = cursor.fetchone()
+            if fila:
+                codigo_error = fila[0]
+                break
+    except:
+        pass
 
     con.close()
-
     return codigo_error
 
 def actualizar_empleado(id_empleado, nuevo_documento, nuevo_nombre, nuevo_puesto, id_usuario, ip):
