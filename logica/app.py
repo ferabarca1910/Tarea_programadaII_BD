@@ -64,5 +64,34 @@ def empleados():
                            filtro=filtro,
                            error=None)
 
+@app.route('/insertar_empleado', methods=['GET', 'POST'])
+def insertar_empleado():
+    if 'id_usuario' not in session:
+        return redirect(url_for('login'))
+
+    id_usuario = session['id_usuario']
+    ip = request.remote_addr
+
+    puestos, _ = db.listar_puestos()
+
+    if request.method == 'POST':
+        valor_documento = request.form['valor_documento']
+        nombre          = request.form['nombre']
+        nombre_puesto   = request.form['nombre_puesto']
+
+        codigo_error = db.insertar_empleado(valor_documento, nombre, nombre_puesto, id_usuario, ip)
+
+        if codigo_error == 0:
+            return redirect(url_for('empleados'))
+        else:
+            descripcion_error = db.obtener_error(codigo_error)
+            return render_template('insertar_empleado.html', 
+                                   puestos=puestos, 
+                                   error=descripcion_error)
+
+    return render_template('insertar_empleado.html', 
+                           puestos=puestos, 
+                           error=None)
+
 if __name__ == '__main__':
     app.run(debug=True)
