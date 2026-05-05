@@ -205,6 +205,7 @@ def listar_movimientos(id_empleado):
 
 def insertar_movimiento(id_empleado, nombre_tipo_movimiento, monto, fecha, id_usuario, ip):
     con = get_conexion()
+    con.autocommit = True  # ← agregar esto
     cursor = con.cursor()
 
     cursor.execute("""
@@ -213,9 +214,15 @@ def insertar_movimiento(id_empleado, nombre_tipo_movimiento, monto, fecha, id_us
         SELECT @CodigoError;
     """, id_empleado, nombre_tipo_movimiento, monto, fecha, id_usuario, ip)
 
-    cursor.nextset()
-    codigo_error = cursor.fetchone()[0]
+    codigo_error = 0
+    try:
+        while cursor.nextset():
+            fila = cursor.fetchone()
+            if fila:
+                codigo_error = fila[0]
+                break
+    except:
+        pass
 
     con.close()
-
     return codigo_error

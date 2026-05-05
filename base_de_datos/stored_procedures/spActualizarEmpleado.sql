@@ -32,9 +32,7 @@ BEGIN
 
     BEGIN TRY
 
-        -- ---------------------------------------------
-        -- Etape 1: Aqui se obtienen los datos actuales del empleado
-        -- ---------------------------------------------
+
         SELECT
             @CedulaAntes       = E.ValorDocumentoIdentidad,
             @NombreAntes       = E.Nombre,
@@ -46,16 +44,12 @@ BEGIN
         WHERE
             E.Id = @IdEmpleado;
 
-        -- ---------------------------------------------
-        -- Etapa 2: Obtendremos el  Id del nuevo puesto
-        -- ---------------------------------------------
+
         SELECT @IdPuesto = Id
         FROM Puesto
         WHERE Nombre = @NuevoNombrePuesto;
 
-        -- ---------------------------------------------
-        -- Etapa 3: Validaremos si la  cedula duplicada ests duplicada  en otro empleado
-        -- ---------------------------------------------
+
         IF EXISTS (
             SELECT 1 FROM Empleado
             WHERE ValorDocumentoIdentidad = @NuevaValorDocumentoIdentidad
@@ -76,9 +70,7 @@ BEGIN
 
             RETURN;
         END
-        -- ---------------------------------------------
-        -- Etapa 4: Validaremos si el  nombre esta duplicado
-        -- ---------------------------------------------
+
         IF EXISTS (
             SELECT 1 FROM Empleado
             WHERE Nombre   = @NuevoNombre
@@ -100,9 +92,7 @@ BEGIN
             RETURN;
         END
 
-        -- ---------------------------------------------
-        -- Etaps 5: Se hace la actualizacion correspondiente
-        -- ---------------------------------------------
+
         BEGIN TRANSACTION;
 
             UPDATE Empleado

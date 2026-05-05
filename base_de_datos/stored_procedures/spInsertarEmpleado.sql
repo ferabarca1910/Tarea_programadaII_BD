@@ -26,16 +26,11 @@ BEGIN
 
     BEGIN TRY
 
-        -- ---------------------------------------------
-        -- Etapa 1: Obtendremos el Id del puesto
-        -- ---------------------------------------------
+
         SELECT @IdPuesto = Id
         FROM Puesto
         WHERE Nombre = @NombrePuesto;
 
-        -- ---------------------------------------------
-        -- Etapa 2: Validar cedula duplicada
-        -- ---------------------------------------------
         IF EXISTS (
             SELECT 1 FROM Empleado
             WHERE ValorDocumentoIdentidad = @ValorDocumentoIdentidad
@@ -56,9 +51,7 @@ BEGIN
             RETURN;
         END
 
-        -- ---------------------------------------------
-        -- PASO 3: Validaremos si el nombre estaduplicado
-        -- ---------------------------------------------
+
         IF EXISTS (
             SELECT 1 FROM Empleado
             WHERE Nombre   = @Nombre
@@ -78,9 +71,7 @@ BEGIN
 
             RETURN;
         END
-        -- ---------------------------------------------
-        -- Etapa 4: Insertaremos el nueco empleado
-        -- ---------------------------------------------
+
         BEGIN TRANSACTION;
 
             INSERT INTO Empleado (IdPuesto, ValorDocumentoIdentidad, Nombre, FechaContratacion, SaldoVacaciones, EsActivo)

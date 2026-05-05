@@ -15,8 +15,6 @@ GO
 
 -- =============================================
 -- TABLA: Puesto
--- ID autoincremental (el XML no tiene IDs fijos para puestos)
--- =============================================
 CREATE TABLE Puesto (
     Id           INT           PRIMARY KEY IDENTITY(1,1),
     Nombre       VARCHAR(100)  NOT NULL,
@@ -26,8 +24,6 @@ GO
 
 -- =============================================
 -- TABLA: Usuario
--- ID fijo: el XML trae los IDs definidos, NO puede ser IDENTITY
--- =============================================
 CREATE TABLE Usuario (
     Id       INT          PRIMARY KEY,   -- SIN IDENTITY, el ID viene del XML
     Username VARCHAR(100) NOT NULL,
@@ -37,8 +33,7 @@ GO
 
 -- =============================================
 -- TABLA: TipoEvento
--- ID fijo: Lo encontramos del 1 al 14
--- =============================================
+
 CREATE TABLE TipoEvento (
     Id     INT          PRIMARY KEY,   -- SIN IDENTITY, el ID viene del XML
     Nombre VARCHAR(100) NOT NULL
@@ -47,8 +42,7 @@ GO
 
 -- =============================================
 -- TABLA: TipoMovimiento
--- ID fijo: Viene del 1 al 6 en el XML
--- =============================================
+
 CREATE TABLE TipoMovimiento (
     Id         INT          PRIMARY KEY,   -- SIN IDENTITY, el ID viene del XML
     Nombre     VARCHAR(100) NOT NULL,
@@ -58,8 +52,7 @@ GO
 
 -- =============================================
 -- TABLA: Error
--- El Codigo es el identificador unico 50001 al 50011
--- =============================================
+
 CREATE TABLE Error (
     Codigo      INT          PRIMARY KEY,  -- SIN IDENTITY, viene del XML
     Descripcion VARCHAR(255) NOT NULL
@@ -68,8 +61,7 @@ GO
 
 -- =============================================
 -- TABLA: Empleado
--- Depende de: Puesto
--- =============================================
+
 CREATE TABLE Empleado (
     Id                      INT           PRIMARY KEY IDENTITY(1,1),
     IdPuesto                INT           NOT NULL,
@@ -86,8 +78,7 @@ GO
 
 -- =============================================
 -- TABLA: Movimiento
--- Depende de: Empleado, TipoMovimiento, Usuario
--- =============================================
+
 CREATE TABLE Movimiento (
     Id               INT           PRIMARY KEY IDENTITY(1,1),
     IdEmpleado       INT           NOT NULL,
@@ -110,8 +101,7 @@ GO
 
 -- =============================================
 -- TABLA: BitacoraEvento
--- Depende de: TipoEvento, Usuario
--- =============================================
+
 CREATE TABLE BitacoraEvento (
     Id           INT          PRIMARY KEY IDENTITY(1,1),
     IdTipoEvento INT          NOT NULL,
@@ -146,9 +136,7 @@ CREATE TABLE DBError (
 );
 GO
 
--- =============================================
--- VERIFICACION: Lista todas las tablas creadas
--- =============================================
+
 SELECT
     TABLE_NAME AS Tabla
 FROM

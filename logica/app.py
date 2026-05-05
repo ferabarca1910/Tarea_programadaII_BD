@@ -183,9 +183,10 @@ def movimientos(id_empleado):
         return redirect(url_for('empleados'))
 
     return render_template('movimientos.html',
-                           empleado=empleado,
-                           movimientos=movimientos,
-                           error=None)
+                       empleado=empleado,
+                       movimientos=movimientos,
+                       id_empleado=id_empleado,  # ← agregar
+                       error=None)
 
 @app.route('/insertar_movimiento/<int:id_empleado>', methods=['GET', 'POST'])
 def insertar_movimiento(id_empleado):
@@ -195,12 +196,11 @@ def insertar_movimiento(id_empleado):
     id_usuario = session['id_usuario']
     ip = request.remote_addr
 
-    empleado, _ = db.consultar_empleado(id_empleado)
+    empleado, _, _ = db.listar_movimientos(id_empleado)  # ← cambia esto
 
-    # Lista de tipos de movimiento para el dropdown
     tipos_movimiento = [
         'Cumplir mes',
-        'Bono vacacional', 
+        'Bono vacacional',
         'Reversion Debito',
         'Disfrute de vacaciones',
         'Venta de vacaciones',
@@ -212,7 +212,7 @@ def insertar_movimiento(id_empleado):
         monto                  = request.form['monto']
         fecha                  = request.form['fecha']
 
-        codigo_error = db.insertar_movimiento(id_empleado, nombre_tipo_movimiento, 
+        codigo_error = db.insertar_movimiento(id_empleado, nombre_tipo_movimiento,
                                               monto, fecha, id_usuario, ip)
 
         if codigo_error == 0:
@@ -225,9 +225,10 @@ def insertar_movimiento(id_empleado):
                                    error=descripcion_error)
 
     return render_template('insertar_movimiento.html',
-                           empleado=empleado,
-                           tipos_movimiento=tipos_movimiento,
-                           error=None)
+                       empleado=empleado,
+                       tipos_movimiento=tipos_movimiento,
+                       id_empleado=id_empleado,  # ← agregar esto
+                       error=None)
 
 @app.after_request
 def no_cache(response):

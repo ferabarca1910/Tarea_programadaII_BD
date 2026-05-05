@@ -32,9 +32,6 @@ BEGIN
 
     BEGIN TRY
 
-        -- ---------------------------------------------
-        -- Etap 1: Verificaremossi el login esta deshabilitado
-        -- ---------------------------------------------
         IF EXISTS (
             SELECT 1
             FROM BitacoraEvento
@@ -52,9 +49,7 @@ BEGIN
             RETURN;
         END
 
-        -- ---------------------------------------------
-        -- Etapa2: Verificaremos si el username existe
-        -- ---------------------------------------------
+
         SELECT @IdUsuario = Id
         FROM Usuario
         WHERE Username = @Username;
@@ -88,9 +83,7 @@ BEGIN
 
             RETURN;
         END
-    -- ---------------------------------------------
-    -- Etapa 3: Verificamos contraseña
-    -- ---------------------------------------------
+
     IF NOT EXISTS (
         SELECT 1
         FROM Usuario
@@ -98,9 +91,8 @@ BEGIN
           AND Password = @Password
     )
     BEGIN
-        SET @CodigoError = 50002; -- Password incorrecto
+        SET @CodigoError = 50002;
 
-        -- Contador intentos fallidos recientes
         SELECT @IntentosRecientes = COUNT(*)
         FROM BitacoraEvento
         WHERE IdTipoEvento = 2
@@ -110,7 +102,6 @@ BEGIN
 
         SET @NumeroIntento = @IntentosRecientes + 1;
 
-        -- Registrar intento fallido
         INSERT INTO BitacoraEvento (IdTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)
         VALUES (
             2,
@@ -118,7 +109,6 @@ BEGIN
             @IdUsuarioScript, @IP, GETDATE()
         );
 
-        -- Si llega a 5 intentos, registrar deshabilitado
         IF @NumeroIntento >= 5
         BEGIN
             INSERT INTO BitacoraEvento (IdTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)
@@ -128,9 +118,7 @@ BEGIN
         RETURN;
     END
 
-    -- ---------------------------------------------
-    -- Etaps 4: Login exitoso
-    -- ---------------------------------------------
+
     SET @CodigoError = 0;
 
     INSERT INTO BitacoraEvento (IdTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)

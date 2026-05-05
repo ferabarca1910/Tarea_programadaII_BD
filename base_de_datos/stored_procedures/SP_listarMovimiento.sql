@@ -22,7 +22,6 @@ BEGIN
 
     BEGIN TRY
 
-        -- Datos del empleado para el encabezado
         SELECT
             E.ValorDocumentoIdentidad,
             E.Nombre,
@@ -30,7 +29,6 @@ BEGIN
         FROM Empleado E
         WHERE E.Id = @IdEmpleado;
 
-        -- Lista de movimientos ordenada por fecha desc
         SELECT
             M.Fecha,
             TM.Nombre     AS NombreTipoMovimiento,

@@ -12,12 +12,12 @@ BEGIN
     SET @CodigoError = 0;
 
     BEGIN TRY
-        --Etapa 1, vamos a ver si es numerico
+
         IF ISNUMERIC(@Filtro) = 1 AND LEN(@Filtro) > 0 
             SET @ESNumerico = 1;
         ELSE
             SET @EsNumerico = 0;
-        --Etapa 2 vamos a listar empleados segun el filtro
+
         SELECT
             E.Id,
             E.ValorDocumentoIdentidad,

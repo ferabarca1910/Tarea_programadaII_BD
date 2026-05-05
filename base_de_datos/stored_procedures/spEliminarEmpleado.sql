@@ -27,9 +27,7 @@ BEGIN
 
     BEGIN TRY
 
-        -- ---------------------------------------------
-        -- Etapa 1: Obtendremos los  datos del empleado para la bitacora
-        -- ---------------------------------------------
+        
         SELECT
             @Cedula          = E.ValorDocumentoIdentidad,
             @Nombre          = E.Nombre,
@@ -47,9 +45,7 @@ BEGIN
             ' Puesto=' + @NombrePuesto +
             ' Saldo='  + CAST(@SaldoVacaciones AS VARCHAR);
 
-        -- ---------------------------------------------
-        -- Etapa 2: Solo se hara el intento
-        -- ---------------------------------------------
+
         IF @Confirmado = 0
         BEGIN
             INSERT INTO BitacoraEvento (IdTipoEvento, Descripcion, IdPostByUser, PostInIP, PostTime)
@@ -58,9 +54,7 @@ BEGIN
             RETURN;
         END
 
-        -- ---------------------------------------------
-        -- Etapa 3: Si esta confirmado se realiza el borrado logico
-        -- ---------------------------------------------
+
         BEGIN TRANSACTION;
 
             UPDATE Empleado

@@ -33,18 +33,12 @@ BEGIN
 
     BEGIN TRY
 
-        -- ---------------------------------------------
-        -- Etapa 1: Obtenemos los datos del tipo de movimiento
-        -- ---------------------------------------------
         SELECT
             @IdTipoMovimiento = Id,
             @TipoAccion       = TipoAccion
         FROM TipoMovimiento
         WHERE Nombre = @NombreTipoMovimiento;
 
-        -- ---------------------------------------------
-        -- Etaps 2: Obtener datos del empleado
-        -- ---------------------------------------------
         SELECT
             @SaldoActual    = SaldoVacaciones,
             @NombreEmpleado = Nombre,
@@ -52,17 +46,13 @@ BEGIN
         FROM Empleado
         WHERE Id = @IdEmpleado;
 
-        -- ---------------------------------------------
-        -- Etapa 3: Calcular nuevo saldo
-        -- ---------------------------------------------
+
         IF @TipoAccion = 'Credito'
             SET @NuevoSaldo = @SaldoActual + @Monto;
         ELSE
             SET @NuevoSaldo = @SaldoActual - @Monto;
 
-        -- ---------------------------------------------
-        -- Etapa 4: Validamos que saldo no sae negativo
-        -- ---------------------------------------------
+
         IF @NuevoSaldo < 0
         BEGIN
             SET @CodigoError = 50011;
@@ -81,9 +71,7 @@ BEGIN
             RETURN;
         END
 
-        -- ---------------------------------------------
-        -- Etap 5: Insertar movimiento y actualizar saldo
-        -- ---------------------------------------------
+
         BEGIN TRANSACTION;
 
             INSERT INTO Movimiento (IdEmpleado, IdTipoMovimiento, Fecha, Monto, NuevoSaldo, IdPostByUser, PostInIP, PostTime)
