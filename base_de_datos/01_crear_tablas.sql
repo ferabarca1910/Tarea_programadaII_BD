@@ -148,7 +148,6 @@ GO
 
 -- =============================================
 -- VERIFICACION: Lista todas las tablas creadas
--- Si todo salio bien deben aparecer 9 tablas
 -- =============================================
 SELECT
     TABLE_NAME AS Tabla
